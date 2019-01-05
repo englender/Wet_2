@@ -99,6 +99,11 @@ void UnionFindPixel::tree_to_array_recurse(TreeNode<int,int>* current,
 
 TreeNode<int,int>** UnionFindPixel::merge_arrays(TreeNode<int,int>** array1,int size1,
                                           TreeNode<int,int>** array2, int size2){
+//
+//    if(size1 == 0)
+//        return array2;
+//    if(size2 == 0)
+//        return array1;
     int new_size= size1+size2;
     TreeNode<int,int>** new_array = new TreeNode<int,int>*[new_size];
     int i1, i2, i_new;
@@ -117,6 +122,7 @@ TreeNode<int,int>** UnionFindPixel::merge_arrays(TreeNode<int,int>** array1,int 
     for(; i2<size2; i2++, i_new++){
         new_array[i_new]=array2[i2];
     }
+    return new_array;
 }
 
 Map_tree<int,int>* UnionFindPixel::build_complete_tree(TreeNode<int,int>** array, int size){
