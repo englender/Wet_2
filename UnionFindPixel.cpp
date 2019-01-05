@@ -131,22 +131,27 @@ Map_tree<int,int>* UnionFindPixel::build_complete_tree(TreeNode<int,int>** array
         height = log2(size);//need to check complexity of log2??
     }
     Map_tree<int,int>* empty_tree= new Map_tree<int,int>();
-    empty_tree->set_root(build_recurse(empty_tree->get_root(),height));
+    TreeNode<int,int>* new_node= new TreeNode<int,int>(0,0);
+    empty_tree->set_root(new_node);
+    build_recurse(empty_tree->get_root(),height);
 
-    int num_to_delete = exp2(height)-size-1;
+    int num_to_delete = exp2(height+1)-size-1;
     delete_right_leaves(empty_tree,num_to_delete,height);
+    empty_tree->set_size(size);
     return empty_tree;
 
 }
 
-TreeNode<int,int>* UnionFindPixel::build_recurse(TreeNode<int,int>* current, int height){
-    if(height<=0)                       //maybe should check if current == nullptr?
-        return nullptr;
+void UnionFindPixel::build_recurse(TreeNode<int,int>* current, int height){
+    if(height<=0 )                       //maybe should check if current == nullptr?
+        return;
 
-    TreeNode<int,int>* new_node= new TreeNode<int,int>(0,0);
-    current->set_left_son(build_recurse(current->get_left_son(),height-1));
-    current->set_right_son(build_recurse(current->get_right_son(),height-1));
-    return new_node;
+    TreeNode<int,int>* new_node1= new TreeNode<int,int>(0,0);
+    current->set_left_son(new_node1);
+    build_recurse(current->get_left_son(),height-1);
+    TreeNode<int,int>* new_node2= new TreeNode<int,int>(0,0);
+    current->set_right_son(new_node2);
+    build_recurse(current->get_right_son(),height-1);
 }
 
 void UnionFindPixel::delete_right_leaves(Map_tree<int,int>* tree, int num_to_delete, int height){
@@ -182,18 +187,18 @@ void UnionFindPixel::insert_array_to_tree(Map_tree<int,int>* tree,TreeNode<int,i
     if(tree->get_size()>0){
         height = log2(tree->get_size());
     }
-    insert_array_to_tree_recurse(tree->get_root(),array,index,height);
+    insert_array_to_tree_recurse(tree->get_root(),array,&index,height);
     update_max_score_recurse(tree->get_root());
 }
 
-void UnionFindPixel::insert_array_to_tree_recurse(TreeNode<int,int>* current,TreeNode<int,int>** array, int index, int height){
+void UnionFindPixel::insert_array_to_tree_recurse(TreeNode<int,int>* current,TreeNode<int,int>** array, int* index, int height){
     if(height<0 || current== nullptr){
         return;
     }
     insert_array_to_tree_recurse(current->get_left_son(),array,index,height-1);
-    current->set_key(array[index]->get_key());
-    current->set_data(array[index]->get_data());
-    index++;
+    current->set_key(array[*index]->get_key());
+    current->set_data(array[*index]->get_data());
+    (*index)++;
 
     insert_array_to_tree_recurse(current->get_right_son(),array,index,height-1);
 

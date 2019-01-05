@@ -14,6 +14,7 @@ using namespace std;
 #define MAX_BF 2
 #define MIN_BF -2
 #define EVEN_BF 0
+#define MIN_SCORE 0
 
 template <class K, class D>
 class TreeNode{
@@ -176,6 +177,8 @@ public:
  * Output:  the tree's size
  */
     int get_size() const;
+
+    void set_size(int size);
 
 /*
  * Description: find's the node with the given key, using recurse finc find_recurse
@@ -391,8 +394,14 @@ int TreeNode<K,D>::get_max_score(){
 
 template <class K, class D>
 void TreeNode<K,D>::update_max_score(){
-    int score_left = this->get_left_son()->get_max_score();
-    int score_right = this->get_right_son()->get_max_score();
+    int score_left= MIN_SCORE;
+    int score_right= MIN_SCORE;
+    if(this->get_left_son()!= nullptr){
+        score_left = this->get_left_son()->get_max_score();
+    }
+    if(this->get_right_son()!= nullptr){
+        score_right = this->get_right_son()->get_max_score();
+    }
 
     if(score_left>=score_right){                //?????
         this->set_max_score(score_left);
@@ -514,6 +523,11 @@ void Map_tree<K,D>::set_root(TreeNode<K,D>* new_root){
 template <class K, class D>
 int Map_tree<K,D>::get_size() const{
     return this->size;
+}
+
+template <class K, class D>
+void Map_tree<K,D>::set_size(int size){
+   this->size=size;
 }
 
 template <class K, class D>
