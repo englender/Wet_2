@@ -72,6 +72,7 @@ Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tre
 
     Map_tree<int,int>* new_tree=build_complete_tree(full_array,(tree1->get_size()+tree2->get_size()));
     insert_array_to_tree(new_tree,full_array);
+    delete full_array;
 
     return new_tree;
 }
