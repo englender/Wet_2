@@ -208,6 +208,7 @@ void UnionFindPixel::insert_array_to_tree_recurse(TreeNode<int,int>* current,Tre
     insert_array_to_tree_recurse(current->get_left_son(),array,index,height-1);
     current->set_key(array[*index]->get_key());
     current->set_data(array[*index]->get_data());
+    current->set_max_score(array[*index]->get_data());
     (*index)++;
 
     insert_array_to_tree_recurse(current->get_right_son(),array,index,height-1);
@@ -238,10 +239,12 @@ bool UnionFindPixel::set_score_to_label(int pixel, int label, int score){
 
     if(label_ptr == nullptr) {
         this->labels[super_pixel]->add_node(label, score);
+        label_ptr =this->labels[super_pixel]->find(label);
         return false;
     }
 
     label_ptr->set_data(score);
+    label_ptr =this->labels[super_pixel]->find(label);
     return true;
 }
 
@@ -281,6 +284,8 @@ ostream& UnionFindPixel::printUnionFind(ostream& os) {
     os << "Labels: " << endl<< "------------------------------------------"<<endl;
     for (int i = 0; i < this->num_of_pixels; i++) {
         this->labels[i]->printTree(os);
+        if(this->labels[i]->get_root()!= nullptr)
+            os << "Max score of label tree: " << this->labels[i]->get_root()->get_max_score() << endl;
         os << "------------------------------------------"<<endl;
     }
     os << "------------------------------------------"<<endl<<endl;

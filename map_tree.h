@@ -187,6 +187,7 @@ public:
  */
     TreeNode<K,D>* find(const K& key);
 
+
 /*
  * Description: finds the node with the sent key
  * Input:   key - the requested key to find
@@ -351,7 +352,7 @@ public:
 //------------------------------TreeNode Implement--------------------------------//
 //----------------------------------------------------------------------------//
 template <class K, class D>
-TreeNode<K,D>::TreeNode(const K& key, const D& data) : key(key), data(data),max_score(0),
+TreeNode<K,D>::TreeNode(const K& key, const D& data) : key(key), data(data),max_score(data),
                                                        height(0), left_son(nullptr),
                                                        right_son(nullptr){
 }
@@ -403,9 +404,9 @@ void TreeNode<K,D>::update_max_score(){
         score_right = this->get_right_son()->get_max_score();
     }
 
-    if(score_left>=score_right){                //?????
+    if(score_left>=score_right && score_left>this->max_score){                //?????
         this->set_max_score(score_left);
-    } else {
+    } else if(score_right>this->max_score) {
         this->set_max_score(score_right);
     }
 }
@@ -541,17 +542,20 @@ TreeNode<K,D>* Map_tree<K,D>::find_recurse(const K& key, TreeNode<K,D>* current_
     if (current_node == nullptr)                //stop conditions - arrived at bottom of the tree
         return nullptr;
 
-    else if (current_node->get_key() == key)    //stop conditions - found the required node
+    else if (current_node->get_key() == key) {    //stop conditions - found the required node
+        current_node->update_max_score();
         return current_node;
-
+    }
     TreeNode<K, D> *node_ptr;
     if (current_node->get_key() > key) {        //the required key is smaller than the current, continue left
         node_ptr = find_recurse(key, current_node->get_left_son());
     } else {                                    //the required key is bigger than the current, continue right
         node_ptr=find_recurse(key, current_node->get_right_son());
     }
+    current_node->update_max_score();
     return node_ptr;                            // ?????? roni - not sure we need this ??????
 }
+
 
 template <class K, class D>
 TreeNode<K,D>* Map_tree<K,D>::find_papa(const K& key, TreeNode<K,D>* papa) {
