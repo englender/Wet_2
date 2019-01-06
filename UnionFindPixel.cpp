@@ -233,19 +233,19 @@ void UnionFindPixel::update_max_score_recurse(TreeNode<int,int>* current){
 
 }
 
-bool UnionFindPixel::set_score_to_label(int pixel, int label, int score){
+void UnionFindPixel::set_score_to_label(int pixel, int label, int score){
     int super_pixel=this->find(pixel);
     auto label_ptr = this->labels[super_pixel]->find(label);
 
     if(label_ptr == nullptr) {
         this->labels[super_pixel]->add_node(label, score);
         label_ptr =this->labels[super_pixel]->find(label);
-        return false;
+        return;
     }
 
     label_ptr->set_data(score);
     label_ptr =this->labels[super_pixel]->find(label);
-    return true;
+
 }
 
 bool UnionFindPixel::delete_label(int pixel, int label){
@@ -256,8 +256,18 @@ bool UnionFindPixel::delete_label(int pixel, int label){
         return false;
 
     this->labels[super_pixel]->remove_node(label_ptr);
+
+    //need to update max_score after delete
     return true;
 
+}
+
+
+bool UnionFindPixel::is_super_pixel_labeled(int pixel){
+    int super_pixel=this->find(pixel);
+    if(this->labels[super_pixel]->get_size()==0)
+        return false;
+    return true;
 }
 
 ostream& UnionFindPixel::printUnionFind(ostream& os) {

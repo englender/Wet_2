@@ -15,8 +15,9 @@ public:
     Image(int imageID, int num_of_pixels);
 //    ~Image();
 
-    bool set_label_score(int pixel, int label, int score);
+    void set_label_score(int pixel, int label, int score);
     bool delete_label(int pixel, int label);
+    bool is_super_pixel_labeled(int pixel);
 };
 
 

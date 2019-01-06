@@ -20,7 +20,7 @@ public:
     int find(int pixel_ID);                             //return index of the "super pixel"
     static int find_recurse(int pixel_id, int* parent);
     void Union(int pixel1, int pixel2);
-
+    bool is_super_pixel_labeled(int pixel);
 ///---------------------------Merge Functions--------------------------------///
 
 /*
@@ -63,7 +63,7 @@ public:
 
 ///--------------------------------------------------------------------------///
 
-    bool set_score_to_label(int pixel, int label, int score);//return true if label exist, else return false
+    void set_score_to_label(int pixel, int label, int score);//return true if label exist, else return false
     bool delete_label(int pixel, int label);//return true if label exist, else return false
 
     ostream& printUnionFind(ostream& os);
