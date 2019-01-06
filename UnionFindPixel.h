@@ -48,9 +48,9 @@ public:
  *          index - the current index in the array to fill
  * Output:  none
  */
-    static void tree_to_array_recurse(TreeNode<int,int>* current, TreeNode<int,int>** array_to_fill, int index);
+    static void tree_to_array_recurse(TreeNode<int,int>* current, TreeNode<int,int>** array_to_fill, int *index);
     static TreeNode<int,int>** merge_arrays(TreeNode<int,int>** array1,int size1,
-                                              TreeNode<int,int>** array2, int size2);
+                                              TreeNode<int,int>** array2, int size2, int *final_size);
     Map_tree<int,int>* build_complete_tree(TreeNode<int,int>** array, int size);
     static void build_recurse(TreeNode<int,int>* current, int height);
     void delete_right_leaves(Map_tree<int,int>* tree, int num_to_delete, int height);

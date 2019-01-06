@@ -38,6 +38,9 @@ void UnionFindPixel:: Union(int pixel1, int pixel2){
     int root1=find(pixel1);
     int root2=find(pixel2);
 
+    if(root1 == root2)      //if trying to merge same super_pixel
+        return;
+
     Map_tree<int,int>* new_tree=merge_trees(labels[root1],labels[root2]);
     delete labels[root1];
     delete labels[root2];
@@ -66,11 +69,12 @@ Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tre
     TreeNode<int,int>** array1=tree_to_array(tree1);
     TreeNode<int,int>** array2=tree_to_array(tree2);
 
-    TreeNode<int,int>** full_array=merge_arrays(array1,tree1->get_size(),array2,tree2->get_size());
+    int full_array_size=0;
+    TreeNode<int,int>** full_array=merge_arrays(array1,tree1->get_size(),array2,tree2->get_size(), &full_array_size);
     delete array1;
     delete array2;
 
-    Map_tree<int,int>* new_tree=build_complete_tree(full_array,(tree1->get_size()+tree2->get_size()));
+    Map_tree<int,int>* new_tree=build_complete_tree(full_array,full_array_size);
     insert_array_to_tree(new_tree,full_array);
     delete full_array;
 
@@ -82,39 +86,42 @@ TreeNode<int,int>** UnionFindPixel::tree_to_array(Map_tree<int,int>* tree){
         return nullptr;
     }
     TreeNode<int,int>** array = new TreeNode<int,int>*[tree->get_size()];
-    tree_to_array_recurse(tree->get_root(),array,0);
+    int index=0;
+    tree_to_array_recurse(tree->get_root(),array,&index);
     return array;
 }
 
 void UnionFindPixel::tree_to_array_recurse(TreeNode<int,int>* current,
                                            TreeNode<int,int>** array_to_fill,
-                                           int index){
+                                           int* index){
     if(current == nullptr)
         return;
 
     tree_to_array_recurse(current->get_left_son(),array_to_fill,index);
-    array_to_fill[index]=current;
-    index++;
+    array_to_fill[*index]=current;
+    (*index)++;
     tree_to_array_recurse(current->get_right_son(),array_to_fill,index);
 }
 
 TreeNode<int,int>** UnionFindPixel::merge_arrays(TreeNode<int,int>** array1,int size1,
-                                          TreeNode<int,int>** array2, int size2){
-//
-//    if(size1 == 0)
-//        return array2;
-//    if(size2 == 0)
-//        return array1;
-    int new_size= size1+size2;
-    TreeNode<int,int>** new_array = new TreeNode<int,int>*[new_size];
+                                          TreeNode<int,int>** array2, int size2, int* final_size){
+
+    *final_size= size1+size2;
+    TreeNode<int,int>** new_array = new TreeNode<int,int>*[*final_size];
     int i1, i2, i_new;
     for(i1 = i2 = i_new = 0; (i1<size1) && (i2<size2); i_new++){
-        if(array1[i1]<array2[i2]){
+        if(array1[i1]->get_key()<array2[i2]->get_key()){
             new_array[i_new]=array1[i1];
             i1++;
-        } else{
+        } else if(array1[i1]->get_key()>array2[i2]->get_key()){
             new_array[i_new]=array2[i2];
             i2++;
+        } else {                            // fixing merging of two labels with the same key: new data = sum of two old datas
+            new_array[i_new]=array1[i1];
+            new_array[i_new]->set_data(array1[i1]->get_data()+array2[i2]->get_data());
+            i1++;
+            i2++;
+            (*final_size)--;             //decreasing the size of the new array because of the duplication
         }
     }
     for(; i1<size1; i1++, i_new++){
@@ -148,10 +155,12 @@ void UnionFindPixel::build_recurse(TreeNode<int,int>* current, int height){
         return;
 
     TreeNode<int,int>* new_node1= new TreeNode<int,int>(0,0);
-    current->set_left_son(new_node1);
-    build_recurse(current->get_left_son(),height-1);
     TreeNode<int,int>* new_node2= new TreeNode<int,int>(0,0);
+
+    current->set_left_son(new_node1);
     current->set_right_son(new_node2);
+
+    build_recurse(current->get_left_son(),height-1);
     build_recurse(current->get_right_son(),height-1);
 }
 
@@ -269,10 +278,12 @@ ostream& UnionFindPixel::printUnionFind(ostream& os) {
     }
     os << endl;
 
-    os << "Labels: " << endl;
-    for (int i = 0; i < this->num_of_pixels; i++)
+    os << "Labels: " << endl<< "------------------------------------------"<<endl;
+    for (int i = 0; i < this->num_of_pixels; i++) {
         this->labels[i]->printTree(os);
-    os << endl;
+        os << "------------------------------------------"<<endl;
+    }
+    os << "------------------------------------------"<<endl<<endl;
 }
 
 

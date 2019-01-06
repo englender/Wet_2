@@ -477,7 +477,8 @@ int TreeNode<K,D>::get_balance_factor(){
 
 template <class K, class D>
 ostream& TreeNode<K,D>::printNode(ostream& os) {
-    os << "Key: " << this->get_key() << " | Left: ";
+    os << "Key: " << this->get_key() << " | ";
+    os << "Data: " << this->get_data() << " | Left: ";
     if(this->get_left_son()== nullptr)
         os << "-";
     else
