@@ -22,7 +22,7 @@ bool ImageTagger::add_image(int imageID) {
 
     int index = find_index_to_insert(this->images_ids,imageID);
     this->images_ids[index]=imageID;
-    this->images[index]= new Image*(imageID, this->num_pixels);
+    this->images[index]= new Image(imageID, this->num_pixels);
     (this->num_images)++;
 
     return true;
@@ -46,7 +46,7 @@ int ImageTagger::hash_func(int k, int imageID) {
 }
 
 
-int ImageTagger::find_index_to_insert(int* array,int ImageID){
+int ImageTagger::find_index_to_insert(int* array,int imageID){
     int index=0;
     while(array[hash_func(index,imageID)]!=EMPTY){
         index++;
@@ -64,7 +64,7 @@ void ImageTagger::check_and_expand() {
     int index;
     for (int i = 0; i < this->size; i++) {
         if(this->images_ids[i]>EMPTY) {
-            index = find_index_to_insert(new_id_array, ImageID);
+            index = find_index_to_insert(new_id_array, images_ids[i]);
             new_id_array[index] = this->images_ids[i];
             new_images[index] = this->images[i];
             this->images[i] = nullptr;
@@ -76,7 +76,7 @@ void ImageTagger::check_and_expand() {
 
     this->images_ids=new_id_array;
     this->images=new_images;
-    this->size=(this.size*2);
+    this->size=(this->size*2);
 }
 
 void ImageTagger::check_and_shrink() {
@@ -89,7 +89,7 @@ void ImageTagger::check_and_shrink() {
     int index;
     for (int i = 0; i < this->size; i++) {
         if(this->images_ids[i]>EMPTY) {
-            index = find_index_to_insert(new_id_array, ImageID);
+            index = find_index_to_insert(new_id_array, images_ids[i]);
             new_id_array[index] = this->images_ids[i];
             new_images[index] = this->images[i];
             this->images[i] = nullptr;
@@ -102,7 +102,7 @@ void ImageTagger::check_and_shrink() {
 
     this->images_ids=new_id_array;
     this->images=new_images;
-    this->size=(this.size/2);
+    this->size=(this->size/2);
 }
 
 bool ImageTagger::delete_image(int imageID) {

@@ -67,7 +67,7 @@ StatusType ResetLabelScore(void *DS, int imageID, int pixel, int label){
         return INVALID_INPUT;
     }
     try {
-        if (((ImageTagger *) DS)->reset_label_score(imageID, pixel, label)) {
+        if (((ImageTagger*)DS)->reset_label_score(imageID, pixel, label)) {
             return SUCCESS;
         }
     }catch(std::exception& e){

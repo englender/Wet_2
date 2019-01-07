@@ -25,7 +25,7 @@ public:
     int find_image(int imageID);
     int hash_func(int k, int imageID);
 
-    int find_index_to_insert(int* array,int ImageID);
+    int find_index_to_insert(int* array,int imageID);
 
     void check_and_expand();
     void check_and_shrink();
