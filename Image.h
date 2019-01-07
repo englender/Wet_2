@@ -18,6 +18,8 @@ public:
     void set_label_score(int pixel, int label, int score);
     bool delete_label(int pixel, int label);
     bool is_super_pixel_labeled(int pixel);
+    int get_max_label_score(int pixel);
+    bool Union(int pixel1, int pixel2);
 };
 
 

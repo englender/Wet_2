@@ -350,7 +350,7 @@ public:
  */
     void delete_correct(const K& key, TreeNode<K,D>* current_node, TreeNode<K,D>* papa);
 
-    };
+};
 
 
 //----------------------------------------------------------------------------//
@@ -945,4 +945,9 @@ TreeNode<K,D>* Map_tree<K,D>::roll_RL(TreeNode<K,D>* c, TreeNode<K,D>* b, TreeNo
 
     return b;
 };
+
+
+
+
+
 #endif //EX2_MAP_TREE_H

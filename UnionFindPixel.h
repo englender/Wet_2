@@ -19,8 +19,9 @@ public:
 
     int find(int pixel_ID);                             //return index of the "super pixel"
     static int find_recurse(int pixel_id, int* parent);
-    void Union(int pixel1, int pixel2);
+    bool Union(int pixel1, int pixel2);
     bool is_super_pixel_labeled(int pixel);
+    int get_max_label_score(int pixel);
 ///---------------------------Merge Functions--------------------------------///
 
 /*

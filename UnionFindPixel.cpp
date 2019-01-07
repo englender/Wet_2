@@ -34,12 +34,12 @@ int UnionFindPixel::find_recurse(int pixel_id, int* parent){
     return new_parent;
 }
 
-void UnionFindPixel:: Union(int pixel1, int pixel2){
+bool UnionFindPixel:: Union(int pixel1, int pixel2){
     int root1=find(pixel1);
     int root2=find(pixel2);
 
-    if(root1 == root2)      //if trying to merge same super_pixel
-        return;
+    if(root1 == root2)      //if trying to merge same super_pixel - return false
+        return false;
 
     Map_tree<int,int>* new_tree=merge_trees(labels[root1],labels[root2]);
     delete labels[root1];
@@ -61,6 +61,8 @@ void UnionFindPixel:: Union(int pixel1, int pixel2){
         labels[root1]=new Map_tree<int,int>(); // same as initialize, needs to be nullptr ??
     }
 //????????????? - needs to merge trees - assumption: only parent of superpixel have a label tree
+
+    return true;
 }
 
 
@@ -271,6 +273,10 @@ bool UnionFindPixel::is_super_pixel_labeled(int pixel){
     if(this->labels[super_pixel]->get_size()==0)
         return false;
     return true;
+}
+
+int UnionFindPixel::get_max_label_score(int pixel){
+    return (this->labels[this->find(pixel)])->get_root()->get_label_of_max_score();
 }
 
 ostream& UnionFindPixel::printUnionFind(ostream& os) {
