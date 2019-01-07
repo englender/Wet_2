@@ -417,12 +417,12 @@ void TreeNode<K,D>::update_max_score(){
     }
     this->set_max_score(this->data);
     this->set_label_of_max_score(this->get_key());
-    if(score_left>=score_right && score_left>this->max_score){                //?????
-        this->set_max_score(score_left);
-        this->set_label_of_max_score(label_max_left);
-    } else if(score_right>this->max_score) {
+    if(score_right>=score_left && score_right>=this->max_score){                //?????
         this->set_max_score(score_right);
         this->set_label_of_max_score(label_max_right);
+    } else if(score_left>this->max_score) {
+        this->set_max_score(score_left);
+        this->set_label_of_max_score(label_max_left);
     }
 }
 

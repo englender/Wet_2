@@ -20,6 +20,7 @@ class ImageTagger {
 
 public:
     ImageTagger(int pixels);
+    ~ImageTagger();
     bool add_image(int imageID);
     bool delete_image(int imageID);
     int find_image(int imageID);

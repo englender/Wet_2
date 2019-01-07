@@ -7,6 +7,8 @@
 
 
 void * Init(int pixels){
+    if(pixels<=0)
+        return NULL;
     ImageTagger* DS;
 
     try {
@@ -14,7 +16,7 @@ void * Init(int pixels){
     }catch(std::exception& e){
         return NULL;
     }
-    return DS;
+    return (void*)DS;
 }
 
 StatusType AddImage(void *DS, int imageID){
@@ -115,5 +117,10 @@ StatusType MergeSuperPixels(void *DS, int imageID, int pixel1, int pixel2){
 }
 
 void Quit(void** DS){
-    delete ((ImageTagger*)DS);
+    if(DS== nullptr || *DS==nullptr)
+        return;
+
+    delete ((ImageTagger*)*DS);
+    *DS=NULL;
+
 }

@@ -20,6 +20,12 @@ UnionFindPixel::UnionFindPixel(int pixels):num_of_pixels(pixels) {
     }
 }
 
+UnionFindPixel::~UnionFindPixel(){
+    delete[] size;
+    delete[] parent;
+    delete[] labels;
+}
+
 int UnionFindPixel::find(int pixel_ID) {
     return find_recurse(pixel_ID,this->parent);
 }
@@ -196,9 +202,10 @@ void UnionFindPixel::delete_right_leaves_recurse(TreeNode<int,int>* current, int
 void UnionFindPixel::insert_array_to_tree(Map_tree<int,int>* tree,TreeNode<int,int>** array){
     int index=0;
     int height=0;
-    if(tree->get_size()>0){
-        height = log2(tree->get_size());
+    if(tree->get_size()<=0){
+        return;
     }
+    height = log2(tree->get_size());
     insert_array_to_tree_recurse(tree->get_root(),array,&index,height);
     update_max_score_recurse(tree->get_root());
 }

@@ -13,6 +13,11 @@ ImageTagger::ImageTagger(int pixels) : size(START_SIZE), num_images(0), num_pixe
         this->images[i]= nullptr;
     }
 }
+ImageTagger::~ImageTagger() {
+    delete[] images_ids;
+
+    delete[] images;        
+}
 
 bool ImageTagger::add_image(int imageID) {
     if(find_image(imageID)!=EMPTY)
@@ -80,7 +85,7 @@ void ImageTagger::check_and_expand() {
 }
 
 void ImageTagger::check_and_shrink() {
-    if(size/num_images< 4)
+    if(num_images==0 ||size<=START_SIZE || size/num_images< 4)
         return;
 
     int *new_id_array = new int[this->size/2];

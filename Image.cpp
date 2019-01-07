@@ -9,9 +9,9 @@ Image::Image(int imageID, int num_of_pixels): imageID(imageID){
 
 }
 
-//Image:: ~Image(){
-//
-//}
+Image:: ~Image(){
+    delete pixels;
+}
 
 
 void Image::set_label_score(int pixel, int label, int score) {

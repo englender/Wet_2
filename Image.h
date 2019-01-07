@@ -13,7 +13,7 @@ class Image {
 
 public:
     Image(int imageID, int num_of_pixels);
-//    ~Image();
+    ~Image();
 
     void set_label_score(int pixel, int label, int score);
     bool delete_label(int pixel, int label);
