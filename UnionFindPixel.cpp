@@ -48,6 +48,7 @@ bool UnionFindPixel:: Union(int pixel1, int pixel2){
         return false;
 
     Map_tree<int,int>* new_tree=merge_trees(labels[root1],labels[root2]);
+
     delete labels[root1];
     delete labels[root2];
 
@@ -79,12 +80,12 @@ Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tre
 
     int full_array_size=0;
     TreeNode<int,int>** full_array=merge_arrays(array1,tree1->get_size(),array2,tree2->get_size(), &full_array_size);
-    delete array1;
-    delete array2;
+    delete[] array1;
+    delete[] array2;
 
-    Map_tree<int,int>* new_tree=build_complete_tree(full_array,full_array_size);
+    Map_tree<int,int>* new_tree=build_complete_tree(full_array_size);
     insert_array_to_tree(new_tree,full_array);
-    delete full_array;
+    delete[] full_array;
 
     return new_tree;
 }
@@ -141,7 +142,7 @@ TreeNode<int,int>** UnionFindPixel::merge_arrays(TreeNode<int,int>** array1,int 
     return new_array;
 }
 
-Map_tree<int,int>* UnionFindPixel::build_complete_tree(TreeNode<int,int>** array, int size){
+Map_tree<int,int>* UnionFindPixel::build_complete_tree(int size){
     int height = 0;
     if(size>0) {
         height = log2(size);//need to check complexity of log2??

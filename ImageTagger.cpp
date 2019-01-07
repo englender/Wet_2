@@ -16,7 +16,7 @@ ImageTagger::ImageTagger(int pixels) : size(START_SIZE), num_images(0), num_pixe
 ImageTagger::~ImageTagger() {
     delete[] images_ids;
 
-    delete[] images;        
+    delete[] images;
 }
 
 bool ImageTagger::add_image(int imageID) {
