@@ -224,6 +224,7 @@ void UnionFindPixel::update_max_score_recurse(TreeNode<int,int>* current){
     }
     if(current->get_height()==0){
         current->set_max_score(current->get_data());
+        current->set_label_of_max_score(current->get_key());
         return;
     }
     update_max_score_recurse(current->get_left_son());
@@ -255,8 +256,10 @@ bool UnionFindPixel::delete_label(int pixel, int label){
     if(label_ptr == nullptr)
         return false;
 
-    this->labels[super_pixel]->remove_node(label_ptr);
+    TreeNode<int,int>* update_max_score_ptr= nullptr;
+    this->labels[super_pixel]->remove_node(label_ptr, &update_max_score_ptr);
 
+    this->labels[super_pixel]->find(update_max_score_ptr->get_key());
     //need to update max_score after delete
     return true;
 

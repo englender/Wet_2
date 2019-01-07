@@ -21,6 +21,7 @@ class TreeNode{
     K key;
     D data;
     int max_score;
+    int label_of_max_score;
     int height;
 
     TreeNode* left_son;
@@ -65,6 +66,10 @@ public:
     void set_max_score(int score);
 
     int get_max_score();
+
+    int get_label_of_max_score();
+
+    void set_label_of_max_score(int label);
 
     void update_max_score();
 
@@ -213,7 +218,7 @@ public:
  * Input:   node_to_remove - the required node to remove.
  * Output:  none.
  */
-    void remove_node(TreeNode<K,D>* node_to_remove);
+    void remove_node(TreeNode<K,D>* node_to_remove, TreeNode<K,D>** update_max_score_ptr);
 
 /*
  * Description: corrects the BF of the tree after adding a new node
@@ -326,7 +331,7 @@ public:
  *          node_to_remove - the node that is to be removed from the tree
  * Output:  none.
  */
-    void remove_son_with_two_grandson(TreeNode<K,D>* papa, TreeNode<K,D>* node_to_remove) ;
+    void remove_son_with_two_grandson(TreeNode<K,D>* papa, TreeNode<K,D>* node_to_remove, TreeNode<K,D>** update_max_score_ptr) ;
 
 /*
  * Description: receives two nodes and swaps their right sons
@@ -352,16 +357,10 @@ public:
 //------------------------------TreeNode Implement--------------------------------//
 //----------------------------------------------------------------------------//
 template <class K, class D>
-TreeNode<K,D>::TreeNode(const K& key, const D& data) : key(key), data(data),max_score(data),
+TreeNode<K,D>::TreeNode(const K& key, const D& data) : key(key), data(data),max_score(data), label_of_max_score(key),
                                                        height(0), left_son(nullptr),
                                                        right_son(nullptr){
 }
-
-//template <class K, class D>
-//TreeNode<K,D>::~TreeNode(){
-//    delete &data;
-//    delete &key;
-//}
 
 template <class K, class D>
 const K& TreeNode<K,D>::get_key() {
@@ -394,20 +393,36 @@ int TreeNode<K,D>::get_max_score(){
 }
 
 template <class K, class D>
+int TreeNode<K,D>::get_label_of_max_score(){
+    return this->label_of_max_score;
+}
+
+template <class K, class D>
+void TreeNode<K,D>::set_label_of_max_score(int label){
+    this->label_of_max_score=label;
+}
+
+template <class K, class D>
 void TreeNode<K,D>::update_max_score(){
     int score_left= MIN_SCORE;
     int score_right= MIN_SCORE;
+    int label_max_left,label_max_right;
     if(this->get_left_son()!= nullptr){
         score_left = this->get_left_son()->get_max_score();
+        label_max_left=this->get_left_son()->get_label_of_max_score();
     }
     if(this->get_right_son()!= nullptr){
         score_right = this->get_right_son()->get_max_score();
+        label_max_right=this->get_right_son()->get_label_of_max_score();
     }
-
+    this->set_max_score(this->data);
+    this->set_label_of_max_score(this->get_key());
     if(score_left>=score_right && score_left>this->max_score){                //?????
         this->set_max_score(score_left);
+        this->set_label_of_max_score(label_max_left);
     } else if(score_right>this->max_score) {
         this->set_max_score(score_right);
+        this->set_label_of_max_score(label_max_right);
     }
 }
 
@@ -479,7 +494,9 @@ int TreeNode<K,D>::get_balance_factor(){
 template <class K, class D>
 ostream& TreeNode<K,D>::printNode(ostream& os) {
     os << "Key: " << this->get_key() << " | ";
-    os << "Data: " << this->get_data() << " | Left: ";
+    os << "Data: " << this->get_data() << " | ";
+    os << "MaxScoreLabel: " << this->get_label_of_max_score() << " | ";
+    os << "MaxScore: " << this->get_max_score() << " | Left: ";
     if(this->get_left_son()== nullptr)
         os << "-";
     else
@@ -600,9 +617,10 @@ void Map_tree<K,D>::add_node(const K& key,const D& data){
 }
 
 template <class K, class D>
-void Map_tree<K,D>::remove_node(TreeNode<K,D>* node_to_remove) {
+void Map_tree<K,D>::remove_node(TreeNode<K,D>* node_to_remove, TreeNode<K,D>** update_max_score_ptr) {
     TreeNode<K,D>* papa=find_papa(node_to_remove->get_key(), this->get_root());
     K* key=new K(node_to_remove->get_key());
+    *update_max_score_ptr=papa;
     if(node_to_remove->get_right_son()== nullptr &&
             node_to_remove->get_left_son()== nullptr) {              //no grandsons
 
@@ -612,7 +630,7 @@ void Map_tree<K,D>::remove_node(TreeNode<K,D>* node_to_remove) {
              node_to_remove->get_left_son()== nullptr){             //only one grandson
         remove_son_with_one_grandson(papa, node_to_remove);
     }else{
-        remove_son_with_two_grandson(papa, node_to_remove);
+        remove_son_with_two_grandson(papa, node_to_remove, update_max_score_ptr);
     }
     delete_correct(*key,this->get_root(), nullptr);
     delete key;
@@ -658,7 +676,7 @@ void Map_tree<K,D>::remove_son_with_one_grandson(TreeNode<K,D>* papa,
 
 template <class K, class D>
 void Map_tree<K,D>:: remove_son_with_two_grandson(TreeNode<K,D>* papa,
-                                                  TreeNode<K,D>* node_to_remove) {
+                                                  TreeNode<K,D>* node_to_remove, TreeNode<K,D>** update_max_score_ptr) {
     TreeNode<K, D> *node_to_switch = node_to_remove->get_right_son();
     TreeNode<K, D> *node_to_switch_PAPA = node_to_remove;
     while(node_to_switch->get_left_son()!= nullptr){
@@ -689,6 +707,8 @@ void Map_tree<K,D>:: remove_son_with_two_grandson(TreeNode<K,D>* papa,
             node_to_switch->set_right_son(nullptr);
         }
     }
+//    node_to_switch->update_max_score();
+    *update_max_score_ptr=node_to_switch_PAPA;
     delete node_to_remove;
 
 }
@@ -803,6 +823,7 @@ void Map_tree<K,D>::delete_correct(const K& key, TreeNode<K,D>* current_node, Tr
             reconnect_to_papa(papa, tmp_ptr);
         }
     }
+//    current_node->update_max_score();
 }
 
 

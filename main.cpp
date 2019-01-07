@@ -38,5 +38,13 @@ int main() {
     cout << "union 4,3" << endl;
     union1->Union(4,3);
     union1->printUnionFind(cout);
+
+    cout << "delete 3,3" << endl;
+    union1->delete_label(3,3);
+    union1->printUnionFind(cout);
+
+    cout << "delete 3,5" << endl;
+    union1->delete_label(3,5);
+    union1->printUnionFind(cout);
     return 0;
 }
