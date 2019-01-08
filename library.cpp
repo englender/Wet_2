@@ -34,6 +34,7 @@ StatusType AddImage(void *DS, int imageID){
 }
 
 StatusType DeleteImage(void *DS, int imageID){
+//    cout << imageID <<endl;
     if(DS== nullptr || imageID<=0){
         return INVALID_INPUT;
     }

@@ -47,7 +47,7 @@ int ImageTagger::find_image(int imageID) {
 }
 
 int ImageTagger::hash_func(int k, int imageID) {
-    return (imageID%size + k*(1 + imageID%5)%size);
+    return ((imageID%size + k*(1 + imageID%5))%size);
 }
 
 
@@ -63,8 +63,14 @@ void ImageTagger::check_and_expand() {
     if(num_images<size)
         return;
 
-    int *new_id_array = new int[this->size*2];
-    Image** new_images=new Image*[this->size*2];
+    int new_size=this->size*2;
+    int *new_id_array = new int[new_size];
+    Image** new_images=new Image*[new_size];
+
+    for (int i = 0; i < new_size; i++) {
+        new_id_array[i]=EMPTY;
+        new_images[i]= nullptr;
+    }
 
     int index;
     for (int i = 0; i < this->size; i++) {
@@ -81,15 +87,21 @@ void ImageTagger::check_and_expand() {
 
     this->images_ids=new_id_array;
     this->images=new_images;
-    this->size=(this->size*2);
+    this->size=(new_size);
 }
 
 void ImageTagger::check_and_shrink() {
     if(num_images==0 ||size<=START_SIZE || size/num_images< 4)
         return;
 
+    int new_size=this->size/2;
     int *new_id_array = new int[this->size/2];
     Image** new_images=new Image*[this->size/2];
+
+    for (int i = 0; i < new_size; i++) {
+        new_id_array[i]=EMPTY;
+        new_images[i]= nullptr;
+    }
 
     int index;
     for (int i = 0; i < this->size; i++) {
@@ -107,7 +119,7 @@ void ImageTagger::check_and_shrink() {
 
     this->images_ids=new_id_array;
     this->images=new_images;
-    this->size=(this->size/2);
+    this->size=(new_size);
 }
 
 bool ImageTagger::delete_image(int imageID) {
