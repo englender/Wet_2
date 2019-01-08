@@ -7,6 +7,7 @@
 
 
 void * Init(int pixels){
+//    cout << "Init" <<endl;
     if(pixels<=0)
         return NULL;
     ImageTagger* DS;
@@ -20,6 +21,7 @@ void * Init(int pixels){
 }
 
 StatusType AddImage(void *DS, int imageID){
+//    cout << "ADD" <<endl;
     if(DS== nullptr || imageID<=0){
         return INVALID_INPUT;
     }
@@ -35,6 +37,7 @@ StatusType AddImage(void *DS, int imageID){
 
 StatusType DeleteImage(void *DS, int imageID){
 //    cout << imageID <<endl;
+//    cout << "Delete" <<endl;
     if(DS== nullptr || imageID<=0){
         return INVALID_INPUT;
     }
@@ -49,7 +52,7 @@ StatusType DeleteImage(void *DS, int imageID){
 }
 
 StatusType SetLabelScore(void *DS, int imageID, int pixel, int label, int score){
-    if(DS== nullptr || pixel<0 || pixel>((ImageTagger*)DS)->get_num_pixels()
+    if(DS== nullptr || pixel<0 || pixel>=((ImageTagger*)DS)->get_num_pixels()
        || imageID<=0 || score<=0 || label<=0){
         return INVALID_INPUT;
     }
@@ -65,7 +68,7 @@ StatusType SetLabelScore(void *DS, int imageID, int pixel, int label, int score)
 }
 
 StatusType ResetLabelScore(void *DS, int imageID, int pixel, int label){
-    if(DS== nullptr || pixel<0 || pixel>((ImageTagger*)DS)->get_num_pixels()
+    if(DS== nullptr || pixel<0 || pixel>=((ImageTagger*)DS)->get_num_pixels()
        || imageID<=0 || label<=0){
         return INVALID_INPUT;
     }
@@ -74,24 +77,24 @@ StatusType ResetLabelScore(void *DS, int imageID, int pixel, int label){
             return SUCCESS;
         }
     }catch(std::exception& e){
-    return ALLOCATION_ERROR;
+        return ALLOCATION_ERROR;
     }
     return FAILURE;
 }
 
 StatusType GetHighestScoredLabel(void *DS, int imageID, int pixel, int *label){
-    if(DS== nullptr || pixel<0 || pixel>((ImageTagger*)DS)->get_num_pixels()
+    if(DS== nullptr || pixel<0 || pixel>=((ImageTagger*)DS)->get_num_pixels()
        || imageID<=0 || label== nullptr){
         return INVALID_INPUT;
     }
-    int index = ((ImageTagger*)DS)->find_image(imageID);
-    if(index==EMPTY){
+    ListNode<int,Image*>* tmp_ptr = ((ImageTagger*)DS)->find_image(imageID);
+    if(tmp_ptr== nullptr){
         return FAILURE;
     }
-    if(!((ImageTagger*)DS)->get_image_by_index(index)->is_super_pixel_labeled(pixel))
+    if(!tmp_ptr->get_data()->is_super_pixel_labeled(pixel))
         return FAILURE;
 
-    *label=((ImageTagger*)DS)->get_image_by_index(index)->get_max_label_score(pixel);
+    *label=tmp_ptr->get_data()->get_max_label_score(pixel);
 
     return SUCCESS;
 }
@@ -103,14 +106,14 @@ StatusType MergeSuperPixels(void *DS, int imageID, int pixel1, int pixel2){
         return INVALID_INPUT;
     }
 
-    int index = ((ImageTagger*)DS)->find_image(imageID);
-    if(index==EMPTY){
+    ListNode<int,Image*>* tmp_ptr = ((ImageTagger*)DS)->find_image(imageID);
+    if(tmp_ptr== nullptr){
         return FAILURE;
     }
     try {
-        if (!((ImageTagger *) DS)->get_image_by_index(index)->Union(pixel1,
-                                                                    pixel2))
+        if (!tmp_ptr->get_data()->Union(pixel1,pixel2))
             return FAILURE;
+
     }catch(std::exception& e){
         return ALLOCATION_ERROR;
     }

@@ -1,22 +1,19 @@
 //
-// Created by nadav on 1/8/2019.
+// Created by ronien on 06/01/2019.
 //
 
-#ifndef ONCOMPUTER_IMAGETAGGER_H
-#define ONCOMPUTER_IMAGETAGGER_H
+#ifndef NEW_WET2_IMAGETAGGER_H
+#define NEW_WET2_IMAGETAGGER_H
 
-#include "node_list.h"
 #include "Image.h"
-#include <math.h>
 
 #define START_SIZE 8
-#define GOLD_NUM ((sqrt(5)-1)/2)
-#define LOAD_FACTOR 0.9
-#define EMPTY_FACTOR 0.25
-
+#define EMPTY -1
+#define DELETED -2
 
 class ImageTagger {
-    Node_list<int,Image*>** images;
+    int* images_ids;
+    Image** images;
     int size;
     int num_images;
     int num_pixels;
@@ -26,12 +23,13 @@ public:
     ~ImageTagger();
     bool add_image(int imageID);
     bool delete_image(int imageID);
-    ListNode<int,Image*>* find_image(int imageID);
-    int hash_func(int imageID);
+    int find_image(int imageID);
+    int hash_func(int k, int imageID);
 
-    void check_and_expand() ;
-    void check_and_shrink() ;
+    int find_index_to_insert(int* array,int imageID);
 
+    void check_and_expand();
+    void check_and_shrink();
 
     int get_num_pixels();
 
@@ -61,8 +59,8 @@ public:
  * Input:   index - the index that the image is in
  * Output   the image in place index in images array
  */
-//    Image* get_image_by_index(int index);
+    Image* get_image_by_index(int index);
 };
 
 
-#endif //ONCOMPUTER_IMAGETAGGER_H
+#endif //NEW_WET2_IMAGETAGGER_H

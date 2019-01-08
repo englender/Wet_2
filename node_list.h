@@ -67,6 +67,8 @@ public:
  */
     ostream& printNode(ostream& os);
 
+    void set_data(D data);
+
 };
 
 //------------------------------------------------------------------------------
@@ -171,6 +173,11 @@ template <class K, class D>
 ostream& ListNode<K,D>::printNode(ostream& os){
     return os <<"Key: " << this->get_key() << endl;
 
+}
+
+template <class K, class D>
+void ListNode<K,D>::set_data(D data) {
+    this->data=data;
 }
 //-------------------------------------------------------------------------------
 
