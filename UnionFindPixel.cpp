@@ -23,6 +23,10 @@ UnionFindPixel::UnionFindPixel(int pixels):num_of_pixels(pixels) {
 UnionFindPixel::~UnionFindPixel(){
     delete[] size;
     delete[] parent;
+
+    for (int i = 0; i < this->num_of_pixels; i++)
+        delete labels[i];
+
     delete[] labels;
 }
 
@@ -75,16 +79,25 @@ bool UnionFindPixel:: Union(int pixel1, int pixel2){
 
 
 Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tree<int,int>* tree2){
+    int array1_len=tree1->get_size();
+    int array2_len=tree2->get_size();
     TreeNode<int,int>** array1=tree_to_array(tree1);
     TreeNode<int,int>** array2=tree_to_array(tree2);
 
     int full_array_size=0;
-    TreeNode<int,int>** full_array=merge_arrays(array1,tree1->get_size(),array2,tree2->get_size(), &full_array_size);
+    TreeNode<int,int>** full_array=merge_arrays(array1,array1_len,array2,array2_len, &full_array_size);
+
+    TreeNode<int,int>* tmp_ptr;
+
     delete[] array1;
     delete[] array2;
 
     Map_tree<int,int>* new_tree=build_complete_tree(full_array_size);
     insert_array_to_tree(new_tree,full_array);
+
+    for (int i = 0; i < full_array_size; i++)
+        delete full_array[i];
+
     delete[] full_array;
 
     return new_tree;
@@ -97,6 +110,7 @@ TreeNode<int,int>** UnionFindPixel::tree_to_array(Map_tree<int,int>* tree){
     TreeNode<int,int>** array = new TreeNode<int,int>*[tree->get_size()];
     int index=0;
     tree_to_array_recurse(tree->get_root(),array,&index);
+//    delete tree;
     return array;
 }
 
@@ -107,7 +121,8 @@ void UnionFindPixel::tree_to_array_recurse(TreeNode<int,int>* current,
         return;
 
     tree_to_array_recurse(current->get_left_son(),array_to_fill,index);
-    array_to_fill[*index]=current;
+//    array_to_fill[*index]=current;
+    array_to_fill[*index]=new TreeNode<int,int>(current->get_key(),current->get_data());
     (*index)++;
     tree_to_array_recurse(current->get_right_son(),array_to_fill,index);
 }
