@@ -15,9 +15,9 @@ ImageTagger::ImageTagger(int pixels) : size(START_SIZE), num_images(0), num_pixe
 
 ImageTagger::~ImageTagger() {
 
-    for (int i = 0; i < this->size ; i++)
-        delete this->images[i];
-
+    for (int i = 0; i< this->size ; i++) {
+      delete this->images[i];
+    }
     delete[] images;
 }
 
