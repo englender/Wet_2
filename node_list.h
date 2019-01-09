@@ -191,6 +191,7 @@ Node_list<K,D>::~Node_list() {
     ListNode<K,D>* next_node;
     while(node_to_delete!= nullptr){
         next_node=node_to_delete->get_next();
+        delete node_to_delete->get_data();
         delete node_to_delete;
         node_to_delete=next_node;
     }
@@ -236,6 +237,7 @@ void Node_list<K,D>::remove_node(ListNode<K,D>* node_ptr){
     if(this->get_first()==node_ptr){
         this->set_first(node_ptr->get_next());
     }
+    delete node_ptr->get_data();
     delete node_ptr;
     this->size--;
 }
