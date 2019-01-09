@@ -116,6 +116,9 @@ TreeNode<int,int>** UnionFindPixel::merge_arrays(TreeNode<int,int>** array1,int 
                                           TreeNode<int,int>** array2, int size2, int* final_size){
 
     *final_size= size1+size2;
+    if(*final_size==0)
+        return nullptr;
+
     TreeNode<int,int>** new_array = new TreeNode<int,int>*[*final_size];
     int i1, i2, i_new;
     for(i1 = i2 = i_new = 0; (i1<size1) && (i2<size2); i_new++){
@@ -148,6 +151,10 @@ Map_tree<int,int>* UnionFindPixel::build_complete_tree(int size){
         height = log2(size);//need to check complexity of log2??
     }
     Map_tree<int,int>* empty_tree= new Map_tree<int,int>();
+
+    if(size==0)
+        return empty_tree;
+
     TreeNode<int,int>* new_node= new TreeNode<int,int>(0,0);
     empty_tree->set_root(new_node);
     build_recurse(empty_tree->get_root(),height);
@@ -269,8 +276,10 @@ bool UnionFindPixel::delete_label(int pixel, int label){
     TreeNode<int,int>* update_max_score_ptr= nullptr;
     this->labels[super_pixel]->remove_node(label_ptr, &update_max_score_ptr);
 
+    if(update_max_score_ptr== nullptr)              // no need to update max score
+        return true;
+
     this->labels[super_pixel]->find(update_max_score_ptr->get_key());
-    //need to update max_score after delete
     return true;
 
 }

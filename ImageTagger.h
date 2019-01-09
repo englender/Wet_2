@@ -27,7 +27,7 @@ public:
     bool add_image(int imageID);
     bool delete_image(int imageID);
     ListNode<int,Image*>* find_image(int imageID);
-    int hash_func(int imageID);
+    int hash_func(int imageID, int size);
 
     void check_and_expand() ;
     void check_and_shrink() ;

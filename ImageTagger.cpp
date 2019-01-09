@@ -24,7 +24,7 @@ bool ImageTagger::add_image(int imageID) {
 
     check_and_expand();
 
-    this->images[hash_func(imageID)]->add_node(imageID,new Image(imageID, this->num_pixels));
+    this->images[hash_func(imageID,this->size)]->add_node(imageID,new Image(imageID, this->num_pixels));
     (this->num_images)++;
 
     return true;
@@ -37,7 +37,7 @@ bool ImageTagger::delete_image(int imageID) {
     if(tmp_ptr == nullptr)
         return false;
 
-    this->images[hash_func(imageID)]->remove_node(tmp_ptr);
+    this->images[hash_func(imageID,this->size)]->remove_node(tmp_ptr);
 
     (this->num_images)--;
     check_and_shrink();
@@ -57,7 +57,7 @@ void ImageTagger::check_and_expand() {
     for (int j = 0; j < this->size; j++) {
         ListNode<int,Image*>* tmp_ptr=this->images[j]->get_first();
         while(tmp_ptr!= nullptr){
-            new_images[hash_func(tmp_ptr->get_key())]->add_node(tmp_ptr->get_key(),tmp_ptr->get_data());
+            new_images[hash_func(tmp_ptr->get_key(),new_size)]->add_node(tmp_ptr->get_key(),tmp_ptr->get_data());
             tmp_ptr->set_data(nullptr);
             tmp_ptr=tmp_ptr->get_next();
         }
@@ -82,7 +82,7 @@ void ImageTagger::check_and_shrink() {
     for (int j = 0; j < this->size; j++) {
         ListNode<int,Image*>* tmp_ptr=this->images[j]->get_first();
         while(tmp_ptr!= nullptr){
-            new_images[hash_func(tmp_ptr->get_key())]->add_node(tmp_ptr->get_key(),tmp_ptr->get_data());
+            new_images[hash_func(tmp_ptr->get_key(),new_size)]->add_node(tmp_ptr->get_key(),tmp_ptr->get_data());
             tmp_ptr->set_data(nullptr);
             tmp_ptr=tmp_ptr->get_next();
         }
@@ -94,13 +94,13 @@ void ImageTagger::check_and_shrink() {
 }
 
 ListNode<int,Image*>* ImageTagger::find_image(int imageID) {
-    int index=hash_func(imageID);
+    int index=hash_func(imageID, this->size);
 //    if (this->images[index]->get_size()==0)
 //        return
     return this->images[index]->find(imageID);
 }
 
-int ImageTagger::hash_func(int imageID){
+int ImageTagger::hash_func(int imageID, int size){
     return imageID%size;
 }
 
