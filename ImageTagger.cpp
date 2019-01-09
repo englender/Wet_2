@@ -15,6 +15,9 @@ ImageTagger::ImageTagger(int pixels) : size(START_SIZE), num_images(0), num_pixe
 
 ImageTagger::~ImageTagger() {
 
+    for (int i = 0; i < this->size ; i++)
+        delete this->images[i];
+
     delete[] images;
 }
 
@@ -62,6 +65,10 @@ void ImageTagger::check_and_expand() {
             tmp_ptr=tmp_ptr->get_next();
         }
     }
+
+    for (int i = 0; i < this->size ; i++)
+        delete this->images[i];
+
     delete[] this->images;
 
     this->images=new_images;
@@ -87,6 +94,10 @@ void ImageTagger::check_and_shrink() {
             tmp_ptr=tmp_ptr->get_next();
         }
     }
+
+    for (int i = 0; i < this->size ; i++)
+        delete this->images[i];
+
     delete[] this->images;
 
     this->images=new_images;
