@@ -24,15 +24,63 @@ class ImageTagger {
 public:
     ImageTagger(int pixels);
     ~ImageTagger();
+
+/*
+ * Description: adds a new image to the images array
+ * Input:   imageID - the imageID of the new image to add
+ * Output:  true - if the new image was added
+ *          false - if already exists and image with the same imageID in the array
+ */
     bool add_image(int imageID);
+
+/*
+ * Description: deletes an image from the images array
+ * Input:   imageID - the imageID to delete
+ * Output:  true - if the image was deleted
+ *          false - if there is no image with the imageID
+ */
     bool delete_image(int imageID);
+
+/*
+ * Description: finds the image with imageID in the images array
+ * Input:   imageID - the imageID of the image to find
+ * Outpu:   the image with the imageID received. if there is no image, returns null
+ */
     ListNode<int,Image*>* find_image(int imageID);
+
+/*
+ * Description: the function that determines where in the array a new image is inserted
+ * Input:   imageID - the imageID of the new image to insert
+ *          size - the size of the images arrat
+ * Output:  the index in the images array to insert the new image
+ */
     int hash_func(int imageID, int size);
 
+/*
+ * Description: Expands images array if necessary, meaning if load factor is LOAD_FACTOR
+ * If expanding is necessary, expands the array to twice its size and inserts the images
+ * again using the hash func.
+ * the func is called after adding a new image to the array
+ * Input:   none
+ * Output:  none
+ */
     void check_and_expand() ;
+
+/*
+ * Description: Shrinks images array if necessary, meaning if load factor is EMPTY_FACTOR
+ * If shrinking is necessary, shrinks the array by half and inserts the images
+ * again using the hash func.
+ * the func is called after every image that is deleted from the array
+ * Input:   none
+ * Output:  none
+ */
     void check_and_shrink() ;
 
-
+/*
+ * Description: Returns the number of pixels in each image as initalized in structure.
+ * Input:   none
+ * Output:  num_pixels in structure
+ */
     int get_num_pixels();
 
 /*
