@@ -87,7 +87,7 @@ Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tre
     int full_array_size=0;
     TreeNode<int,int>** full_array=merge_arrays(array1,array1_len,array2,array2_len, &full_array_size);
 
-    TreeNode<int,int>* tmp_ptr;
+//    TreeNode<int,int>* tmp_ptr;
 
     delete[] array1;
     delete[] array2;
@@ -196,7 +196,7 @@ void UnionFindPixel::build_recurse(TreeNode<int,int>* current, int height){
 }
 
 void UnionFindPixel::delete_right_leaves(Map_tree<int,int>* tree, int num_to_delete, int height){
-    TreeNode<int,int>* current=tree->get_root();
+//    TreeNode<int,int>* current=tree->get_root();
     delete_right_leaves_recurse(tree->get_root(),&num_to_delete,height);
 
 }
@@ -311,38 +311,38 @@ int UnionFindPixel::get_max_label_score(int pixel){
     return (this->labels[this->find(pixel)])->get_root()->get_label_of_max_score();
 }
 
-ostream& UnionFindPixel::printUnionFind(ostream& os) {
-    os << "Index:  | ";
-    for (int i = 0; i < this->num_of_pixels; i++)
-        os << (i) << " | ";
-    os << endl;
-
-    os << "Size:   | ";
-    for (int i = 0; i < this->num_of_pixels; i++)
-        os << this->size[i] << " | ";
-    os << endl;
-
-    os << "Parent: | ";
-    for (int i = 0; i < this->num_of_pixels; i++){
-        if (this->parent[i] == ROOT)
-            os << "- | ";
-        else {
-            os << this->parent[i] << " | ";
-        }
-    }
-    os << endl;
-
-    os << "Labels: " << endl<< "------------------------------------------"<<endl;
-    for (int i = 0; i < this->num_of_pixels; i++) {
-        this->labels[i]->printTree(os);
-        if(this->labels[i]->get_root()!= nullptr)
-            os << "Max score of label tree: " << this->labels[i]->get_root()->get_max_score() << endl;
-        os << "------------------------------------------"<<endl;
-    }
-    os << "------------------------------------------"<<endl<<endl;
-}
-
-
+//ostream& UnionFindPixel::printUnionFind(ostream& os) {
+//    os << "Index:  | ";
+//    for (int i = 0; i < this->num_of_pixels; i++)
+//        os << (i) << " | ";
+//    os << endl;
+//
+//    os << "Size:   | ";
+//    for (int i = 0; i < this->num_of_pixels; i++)
+//        os << this->size[i] << " | ";
+//    os << endl;
+//
+//    os << "Parent: | ";
+//    for (int i = 0; i < this->num_of_pixels; i++){
+//        if (this->parent[i] == ROOT)
+//            os << "- | ";
+//        else {
+//            os << this->parent[i] << " | ";
+//        }
+//    }
+//    os << endl;
+//
+//    os << "Labels: " << endl<< "------------------------------------------"<<endl;
+//    for (int i = 0; i < this->num_of_pixels; i++) {
+//        this->labels[i]->printTree(os);
+//        if(this->labels[i]->get_root()!= nullptr)
+//            os << "Max score of label tree: " << this->labels[i]->get_root()->get_max_score() << endl;
+//        os << "------------------------------------------"<<endl;
+//    }
+//    os << "------------------------------------------"<<endl<<endl;
+//}
+//
+//
 
 
 

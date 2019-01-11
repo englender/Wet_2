@@ -175,7 +175,7 @@ public:
     int get_max_label_score(int pixel);
 
 
-    ostream& printUnionFind(ostream& os);
+//    ostream& printUnionFind(ostream& os);
 
 
 
