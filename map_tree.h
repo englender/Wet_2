@@ -683,6 +683,7 @@ void Map_tree<K,D>:: remove_son_with_two_grandson(TreeNode<K,D>* papa,
         node_to_switch_PAPA=node_to_switch;
         node_to_switch=node_to_switch->get_left_son();
     }
+
     TreeNode<K, D> *tmp_ptr = node_to_remove->get_left_son();
     node_to_remove->set_left_son(nullptr);
     node_to_switch->set_left_son(tmp_ptr);
@@ -708,7 +709,12 @@ void Map_tree<K,D>:: remove_son_with_two_grandson(TreeNode<K,D>* papa,
         }
     }
 //    node_to_switch->update_max_score();
-    *update_max_score_ptr=node_to_switch_PAPA;
+    if(node_to_switch_PAPA==node_to_remove){
+        *update_max_score_ptr = node_to_switch;
+    }else {
+        *update_max_score_ptr = node_to_switch_PAPA;
+    }
+
     delete node_to_remove;
 
 }
