@@ -89,15 +89,19 @@ Map_tree<int,int>* UnionFindPixel::merge_trees(Map_tree<int,int>* tree1, Map_tre
 
 //    TreeNode<int,int>* tmp_ptr;
 
-    delete[] array1;
-    delete[] array2;
-
     Map_tree<int,int>* new_tree=build_complete_tree(full_array_size);
     insert_array_to_tree(new_tree,full_array);
 
-    for (int i = 0; i < full_array_size; i++)
-        delete full_array[i];
+    for (int i = 0; i < array1_len; i++){
+        delete array1[i];
+    }
 
+    for (int i = 0; i < array2_len; i++){
+        delete array2[i];
+    }
+
+    delete[] array1;
+    delete[] array2;
     delete[] full_array;
 
     return new_tree;
